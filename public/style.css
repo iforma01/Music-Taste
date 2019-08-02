@@ -1,0 +1,75 @@
+
+/*
+Color palette:
+#adc7a9 - green
+#628C5C - dark green
+#214a1b - very dark green
+#661e2b - prune
+#FFE2E2 - misty rose
+*/
+
+
+body {
+    background-color: #adc7a9;
+}
+
+
+
+
+/* Buttons */
+.buttonTaste {
+    border-color: #661e2b;
+    background-color: #661e2b;
+    border-radius: 25px;
+    padding: 20px;
+    width: 270px;
+    height: 70px;
+
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 20px;
+    color: white;
+}
+
+
+
+
+
+/* Text */
+#musicTasteTitle {
+    color: 'black';
+    font-family: 'Raleway', sans-serif;
+    font-size: 95px;
+}
+.subheadText {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 40px;
+    color: #214a1b;
+}
+.regText {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 20px;
+}
+.text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 500px;
+}
+
+
+
+
+
+/* Containers */
+.container {
+    text-align: center;
+}
+
+
+
+
+
+/* Pages */
+#login, #loggedin {
+    display: none;
+}

@@ -40,6 +40,45 @@ app.use(express.static(__dirname + '/public'))
    .use(cors())
    .use(cookieParser());
 
+// Database IRF
+
+// const MongoClient = require('mongodb').MongoClient;
+// const assert = require('assert');
+//
+// // Connection URL
+// const url = 'mongodb://localhost:27017';
+//
+// // Database Name
+// const dbName = 'testing123';
+//
+// // Use connect method to connect to the server
+// MongoClient.connect(url, function(err, client) {
+//   assert.equal(null, err);
+//   console.log("Connected successfully to server");
+//
+//   const db = client.db(dbName);
+//
+//   client.close();
+// });
+
+// Mongo initialization, setting up a connection to a MongoDB  (on Heroku or localhost)
+// var mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/musicTasteDB'; // comp20 is the name of the database we are using in MongoDB
+// var mongo = require('mongodb');
+// var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
+//     console.log("in monogodb connection!!!");
+//     db = databaseConnection;
+// });
+
+
+var mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/musicTasteDB';
+var MongoClient = require('mongodb').MongoClient, format = require('util').format;
+var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
+    console.log("in monogodb connection!!!");
+	db = databaseConnection;
+});
+
+
+
 app.get('/login', function(req, res) {
 
   var state = generateRandomString(16);
@@ -145,3 +184,19 @@ app.get('/refresh_token', function(req, res) {
 
 console.log('Listening on 8888');
 app.listen(8888);
+
+/*
+first user signs in
+get their album list
+^ save album list in mongodb with key as spotify user id 
+hash albums into hashtable
+second user signs in
+get their album list
+iterate through album list and check for match in hashtable, while adding up count of same
+display percentage similar
+display top 5 for each
+*/
+
+/*
+also make my own API as practice
+*/

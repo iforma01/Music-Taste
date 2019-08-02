@@ -25,7 +25,7 @@
                 <p class="subheadText">How similar is your music taste?</p><p class="subheadText">Compare Spotify libraries with your friends</p>
             </div>
             <div id="login">
-                <a href="/login" class="buttonTaste">Log in with Spotify</a>
+                <a href="/loginFirst" class="buttonLogin">Log in with Spotify</a>
             </div>
             <div id="loggedin">
                 <!-- <div id="user-profile">
@@ -36,6 +36,8 @@
                     <p class="buttonText">What's my music taste?</p>
                 </button> -->
                 <button class="buttonTaste" id="myTaste">What's my music taste?</button>
+                <a href="/loginSecond" class="buttonLogin" id="yourLogin">Friend login!</a>
+                <button class="buttonTaste" id="yourTaste">What's your friend's music taste?</button>
             </div>
         </div>
 
@@ -73,6 +75,7 @@
         <script>
             (function() {
                 var spotifyId = '';
+                var myNumAlbums = 0;
 
                 /**
                  * Obtains parameters from the hash of the URL
@@ -156,6 +159,19 @@
                             json: true
                         }).done(function(data) {
                             console.log("ALL ALBUMS", data);
+                            console.log("first album id: ", data.items[0].album.id);
+                            myNumAlbums = data.items.length;
+                            console.log("myNumAlbums: ", myNumAlbums);
+                            for (var x = 0; x < data.items.length; x++) {
+                                console.log(data.items[x].album.name + " by " + data.items[x].album.artists[0].name);
+                                var album = {
+                                    name: data.items[x].album.name,
+                                    artist: data.items[x].album.artists[0].name,
+                                }
+                                window.localStorage.setItem(data.items[x].album.id, JSON.stringify(album));
+                            }
+                            var testing = JSON.parse(window.localStorage.getItem(data.items[0].album.id));
+                            console.log("ending result: ", testing);
                             // var num = Math.floor(Math.random() * 20);
                             // console.log(num)
                             // console.log(data.items[num].album.name)
@@ -163,6 +179,47 @@
                             // oauthPlaceholder.innerHTML = oauthTemplate({
                             //     album_title: album_title
                             // });
+                        });
+                    }, false);
+
+                    document.getElementById('yourTaste').addEventListener('click', function() {
+                        $.ajax({
+                            //url: 'https://api.spotify.com/v1/albums/6KSvWFf4g4PrIldtchJsTC',
+                            url: 'https://api.spotify.com/v1/me/albums',
+                            headers: { 'Authorization': 'Bearer ' + access_token },
+                            json: true
+                        }).done(function(data) {
+                            console.log("ALL ALBUMS", data);
+                            console.log("first album id: ", data.items[0].album.id);
+                            console.log("LENGTH: ", data.items.length);
+                            var simCount = 0;
+                            var similarAlbums = [];
+                            for (var x = 0; x < data.items.length; x++) {
+                                console.log(data.items[x].album.name + " by " + data.items[x].album.artists[0].name);
+                                var result = window.localStorage.getItem(data.items[x].album.id);
+                                if (result != null) {
+                                    console.log("SIMILAR ONE!!!!!!      ", JSON.parse(result));
+                                    simCount += 1;
+                                    similarAlbums.push(result);
+                                }
+                                // var album = {
+                                //     name: data.items[x].album.name,
+                                //     artist: data.items[x].album.artists[0].name,
+                                // }
+                                //window.localStorage.setItem(data.items[x].album.id, JSON.stringify(album));
+                            }
+                            // 7bgi7zCoDsZdlLKPonHZqP = chance
+                            var testing = JSON.parse(window.localStorage.getItem('1vz94WpXDVYIEGja8cjFNa'));
+                            console.log("IN YOUR TASTE: ", testing);
+                            var denom = Math.max(data.items.length, myNumAlbums);
+                            console.log("denom: ", denom);
+                            console.log("PRINTING SIMILAR!!! . . .. . . .. . .. . .", simCount);
+                            var percentage = simCount / denom * 100;
+                            console.log("percentage!!!!!!!!!!!!!!", percentage, "%");
+                            for (var x = 0; x < similarAlbums.length; x++) {
+                                console.log(JSON.parse(similarAlbums[x]));
+                            }
+                            window.localStorage.clear();
                         });
                     }, false);
 

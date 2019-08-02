@@ -30,6 +30,19 @@ body {
     color: white;
 }
 
+.buttonLogin {
+    border-color: #FFE2E2;
+    background-color: #FFE2E2;
+    border-radius: 25px;
+    padding: 20px;
+    width: 270px;
+    height: 70px;
+
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 20px;
+    color: white;
+}
+
 
 
 

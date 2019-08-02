@@ -79,7 +79,7 @@ var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
 
 
 
-app.get('/login', function(req, res) {
+app.get('/loginFirst', function(req, res) {
 
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
@@ -93,6 +93,25 @@ app.get('/login', function(req, res) {
       scope: scope,
       redirect_uri: redirect_uri,
       state: state
+    }));
+});
+
+// IRF
+app.get('/loginSecond', function(req, res) {
+
+  var state = generateRandomString(16);
+  res.cookie(stateKey, state);
+
+  // your application requests authorization
+  var scope = 'user-read-private user-read-email user-library-read user-top-read';
+  res.redirect('https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: client_id,
+      scope: scope,
+      redirect_uri: redirect_uri,
+      state: state,
+      show_dialog: true
     }));
 });
 
@@ -188,13 +207,57 @@ app.listen(8888);
 /*
 first user signs in
 get their album list
-^ save album list in mongodb with key as spotify user id 
+@ save album list in mongodb with key as spotify user id
 hash albums into hashtable
 second user signs in
 get their album list
 iterate through album list and check for match in hashtable, while adding up count of same
 display percentage similar
-display top 5 for each
+@ display top 5 for each
+
+TODO friday night:
+- get all albums not just 20
+- do redirection to different pages, with buttons in correct places
+- display the results on the actual webpages
+
+TODO next:
+- monogodb
+- put it on Heroku
+
+TODO next next:
+- frontend improvements
+
+TODO next next next or never:
+- other bonus features
+
+
+TODO writing:
+BACKEND
+save first user query to mongo db and make sure retrieval works
+get second user login to work
+retrieve first user data from mongodb and load it into local hashtable
+compare second user data with first user data
+make percentage number
+get all albums in library not just first 20
+
+FRONTEND
+some kind of onready function after first user data is saved in database
+leads to login page for second user
+leads to results page (results url or just display results on same page?)
+make results page with percentage
+
+BACKEND
+keep a list of the albums that are similar between users
+
+FRONTEND
+display list of albums in common on results page
+
+other improvements:
+display each user's top albums
+dipslay user's complete list of albums (/ with common ones highlighted)
+display other info about their genres or whatever
+persistently store the users' data in db and query it with spotify id before even making api call (not great for functionality but more as practice with db)
+
 */
 
 /*

@@ -201,76 +201,6 @@ const reqAlbums = async (offset) => {
     }
 }
 
-app.get('/secondMusic', function(req, res) {
-
-    //
-    // var code = req.query.code || null;
-    // var state = req.query.state || null;
-    // var storedState = req.cookies ? req.cookies[stateKey] : null;
-    //
-    // if (state === null || state !== storedState) {
-    //   res.redirect('/#' +
-    //     querystring.stringify({
-    //       error: 'state_mismatch'
-    //     }));
-    // } else {
-    //   res.clearCookie(stateKey);
-    //   var authOptions = {
-    //     url: 'https://accounts.spotify.com/api/token',
-    //     form: {
-    //       code: code,
-    //       redirect_uri: redirect_uri_first,
-    //       grant_type: 'authorization_code'
-    //     },
-    //     headers: {
-    //       'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-    //     },
-    //     json: true
-    //   };
-    //
-    //   request.post(authOptions, function(error, response, body) {
-    //     if (!error && response.statusCode === 200) {
-    //
-    //       var access_token = body.access_token,
-    //           refresh_token = body.refresh_token;
-    //       access_token_global = access_token;
-    //       console.log("access token in second: ", access_token_global);
-    //
-    //       var options = {
-    //         url: 'https://api.spotify.com/v1/me',
-    //         headers: { 'Authorization': 'Bearer ' + access_token },
-    //         json: true
-    //       };
-    //
-    //       // use the access token to access the Spotify Web API
-    //       request.get(options, function(error, response, body) {
-    //         console.log(body);
-    //       });
-    //
-    //       // we can also pass the token to the browser to make requests from there
-    //       res.redirect('/#' +
-    //         querystring.stringify({
-    //           access_token: access_token,
-    //           refresh_token: refresh_token
-    //         }));
-    //     } else {
-    //       res.redirect('/#' +
-    //         querystring.stringify({
-    //           error: 'invalid_token'
-    //         }));
-    //     }
-    //   });
-    // }
-
-
-
-
-
-
-
-    var path = require('path');
-    res.sendFile('secondMusic.html', { root: path.join(__dirname, 'public') });
-});
 
 // end added by IRF
 
@@ -379,35 +309,35 @@ app.get('/albumsFirst', function(req, res) {
 });
 
 
-// getSimilarAlbums(firstAlbums, secondAlbums) {
-//     var simCount = 0;
-//     var similarAlbums = [];
-//     for (var x = 0; x < data.items.length; x++) {
-//         console.log(data.items[x].album.name + " by " + data.items[x].album.artists[0].name);
-//         var result = window.localStorage.getItem(data.items[x].album.id);
-//         if (result != null) {
-//             console.log("SIMILAR ONE!!!!!!      ", JSON.parse(result));
-//             simCount += 1;
-//             similarAlbums.push(result);
-//         }
-//         // var album = {
-//         //     name: data.items[x].album.name,
-//         //     artist: data.items[x].album.artists[0].name,
-//         // }
-//         //window.localStorage.setItem(data.items[x].album.id, JSON.stringify(album));
-//     }
-//     // 7bgi7zCoDsZdlLKPonHZqP = chance
-//     var testing = JSON.parse(window.localStorage.getItem('1vz94WpXDVYIEGja8cjFNa'));
-//     console.log("IN YOUR TASTE: ", testing);
-//     var denom = Math.max(data.items.length, myNumAlbums);
-//     console.log("denom: ", denom);
-//     console.log("PRINTING SIMILAR!!! . . .. . . .. . .. . .", simCount);
-//     var percentage = simCount / denom * 100;
-//     console.log("percentage!!!!!!!!!!!!!!", percentage, "%");
-//     for (var x = 0; x < similarAlbums.length; x++) {
-//         console.log(JSON.parse(similarAlbums[x]));
-//     }
-// }
+getSimilarAlbums(firstAlbums, secondAlbums) {
+    var simCount = 0;
+    var similarAlbums = [];
+    for (var x = 0; x < data.items.length; x++) {
+        console.log(data.items[x].album.name + " by " + data.items[x].album.artists[0].name);
+        var result = window.localStorage.getItem(data.items[x].album.id);
+        if (result != null) {
+            console.log("SIMILAR ONE!!!!!!      ", JSON.parse(result));
+            simCount += 1;
+            similarAlbums.push(result);
+        }
+        // var album = {
+        //     name: data.items[x].album.name,
+        //     artist: data.items[x].album.artists[0].name,
+        // }
+        //window.localStorage.setItem(data.items[x].album.id, JSON.stringify(album));
+    }
+    // 7bgi7zCoDsZdlLKPonHZqP = chance
+    var testing = JSON.parse(window.localStorage.getItem('1vz94WpXDVYIEGja8cjFNa'));
+    console.log("IN YOUR TASTE: ", testing);
+    var denom = Math.max(data.items.length, myNumAlbums);
+    console.log("denom: ", denom);
+    console.log("PRINTING SIMILAR!!! . . .. . . .. . .. . .", simCount);
+    var percentage = simCount / denom * 100;
+    console.log("percentage!!!!!!!!!!!!!!", percentage, "%");
+    for (var x = 0; x < similarAlbums.length; x++) {
+        console.log(JSON.parse(similarAlbums[x]));
+    }
+}
 
 function loadRelevantDataToObject(allAlbums, callback) {
     var albumsObject = {};
@@ -519,68 +449,149 @@ app.get('/albumsSecond', function(req, res) {
 
 });
 
-app.get('/callback', function(req, res) {
+app.get('/secondMusic', function(req, res) {
 
-  // your application requests refresh and access tokens
-  // after checking the state parameter
+    var code = req.query.code || null;
+    var state = req.query.state || null;
+    var storedState = req.cookies ? req.cookies[stateKey] : null;
 
-  var code = req.query.code || null;
-  var state = req.query.state || null;
-  var storedState = req.cookies ? req.cookies[stateKey] : null;
+    console.log("2req: ", req.query.code);
+    console.log("2state: ", req.query.state);
+    console.log("2storedState: ", storedState);
 
-  if (state === null || state !== storedState) {
-    res.redirect('/#' +
-      querystring.stringify({
-        error: 'state_mismatch'
-      }));
-  } else {
-    res.clearCookie(stateKey);
-    var authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
-      form: {
-        code: code,
-        redirect_uri: redirect_uri_first,
-        grant_type: 'authorization_code'
-      },
-      headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-      },
-      json: true
-    };
-
-    request.post(authOptions, function(error, response, body) {
-      if (!error && response.statusCode === 200) {
-
-        var access_token = body.access_token,
-            refresh_token = body.refresh_token;
-        access_token_global = access_token;
-        console.log("access token in first: ", access_token_global);
-
-        var options = {
-          url: 'https://api.spotify.com/v1/me',
-          headers: { 'Authorization': 'Bearer ' + access_token },
-          json: true
+    if (state === null || state !== storedState) {
+        console.log("odelia");
+        res.redirect('/#' + querystring.stringify({
+            error: 'state_mismatch'
+        }));
+    } else {
+        console.log("saraphina");
+        res.clearCookie(stateKey);
+        var authOptions = {
+            url: 'https://accounts.spotify.com/api/token',
+            form: {
+                code: code,
+                redirect_uri: redirect_uri_second,
+                grant_type: 'authorization_code'
+            },
+            headers: {
+                'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+            },
+            json: true
         };
 
-        // use the access token to access the Spotify Web API
-        request.get(options, function(error, response, body) {
-          console.log(body);
-        });
+        request.post(authOptions, function(error, response, body) {
+            console.log("response.statusCode: ", response.statusCode);
+            console.log("error??? ", error);
+            console.log("body.....", body);
+            if (!error && response.statusCode === 200) {
+                console.log("mom");
 
-        // we can also pass the token to the browser to make requests from there
-        res.redirect('/#' +
-          querystring.stringify({
-            access_token: access_token,
-            refresh_token: refresh_token
-          }));
-      } else {
-        res.redirect('/#' +
-          querystring.stringify({
-            error: 'invalid_token'
-          }));
-      }
-    });
-  }
+                var access_token = body.access_token,
+                refresh_token = body.refresh_token;
+                access_token_global = access_token;
+                console.log("access token in second: ", access_token_global);
+
+                var options = {
+                    url: 'https://api.spotify.com/v1/me',
+                    headers: { 'Authorization': 'Bearer ' + access_token },
+                    json: true
+                };
+
+                // use the access token to access the Spotify Web API
+                request.get(options, function(error, response, body) {
+                    console.log(body);
+                });
+
+                // we can also pass the token to the browser to make requests from there
+                // res.redirect('/#' +
+                // querystring.stringify({
+                //     access_token: access_token,
+                //     refresh_token: refresh_token
+                // }));
+
+                var path = require('path');
+                res.sendFile('secondMusic.html', { root: path.join(__dirname, 'public') });
+            } else {
+                console.log("dad");
+                res.redirect('/#' +
+                querystring.stringify({
+                    error: 'invalid_token'
+                }));
+            }
+        });
+    }
+
+    // var path = require('path');
+    // res.sendFile('secondMusic.html', { root: path.join(__dirname, 'public') });
+});
+
+
+app.get('/callback', function(req, res) {
+
+    // your application requests refresh and access tokens
+    // after checking the state parameter
+
+    var code = req.query.code || null;
+    var state = req.query.state || null;
+    var storedState = req.cookies ? req.cookies[stateKey] : null;
+
+    console.log("1req: ", req.query.code);
+    console.log("1state: ", req.query.state);
+    console.log("1storedState: ", storedState);
+
+    if (state === null || state !== storedState) {
+        res.redirect('/#' + querystring.stringify({
+            error: 'state_mismatch'
+        }));
+    } else {
+        res.clearCookie(stateKey);
+        var authOptions = {
+            url: 'https://accounts.spotify.com/api/token',
+            form: {
+                code: code,
+                redirect_uri: redirect_uri_first,
+                grant_type: 'authorization_code'
+            },
+            headers: {
+                'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+            },
+            json: true
+        };
+
+        request.post(authOptions, function(error, response, body) {
+            if (!error && response.statusCode === 200) {
+
+                var access_token = body.access_token,
+                refresh_token = body.refresh_token;
+                access_token_global = access_token;
+                console.log("access token in first: ", access_token_global);
+
+                var options = {
+                    url: 'https://api.spotify.com/v1/me',
+                    headers: { 'Authorization': 'Bearer ' + access_token },
+                    json: true
+                };
+
+                // use the access token to access the Spotify Web API
+                request.get(options, function(error, response, body) {
+                    console.log(body);
+                });
+
+                // we can also pass the token to the browser to make requests from there
+                res.redirect('/#' +
+                querystring.stringify({
+                    access_token: access_token,
+                    refresh_token: refresh_token
+                }));
+            } else {
+                res.redirect('/#' +
+                querystring.stringify({
+                    error: 'invalid_token'
+                }));
+            }
+        });
+    }
 });
 
 app.get('/refresh_token', function(req, res) {

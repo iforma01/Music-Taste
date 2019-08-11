@@ -54,33 +54,6 @@ app.use(express.static(__dirname + '/public'))
 
 // Database IRF
 
-// const MongoClient = require('mongodb').MongoClient;
-// const assert = require('assert');
-//
-// // Connection URL
-// const url = 'mongodb://localhost:27017';
-//
-// // Database Name
-// const dbName = 'testing123';
-//
-// // Use connect method to connect to the server
-// MongoClient.connect(url, function(err, client) {
-//   assert.equal(null, err);
-//   console.log("Connected successfully to server");
-//
-//   const db = client.db(dbName);
-//
-//   client.close();
-// });
-
-// Mongo initialization, setting up a connection to a MongoDB  (on Heroku or localhost)
-// var mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/musicTasteDB'; // comp20 is the name of the database we are using in MongoDB
-// var mongo = require('mongodb');
-// var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
-//     console.log("in monogodb connection!!!");
-//     db = databaseConnection;
-// });
-
 // start added by IRF
 var mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/musicTasteDB';
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;
@@ -124,7 +97,6 @@ async function getFromDb(callback) {
         const collection = db.collection('first');
         collection.find({}).toArray(function(err, result) {
             if (err) throw err;
-            //console.log(result);
             //return result;
             callback(result);
         });
@@ -146,19 +118,6 @@ function deleteCollection() {
     });
 }
 
-// const go = async () => {
-//     allAlbums = await getAlbums(); // IRF this is the call
-//     // allAlbums = getAlbums();
-//         // We're all done.   Now we can do what we would like with our array of user objects.
-//     console.log(`Total length of users is ${allAlbums.length}`);
-//     return allAlbums;
-//     console.log("after return???");
-// }
-
-// function doSomethingCool() {
-//     getAlbums().then(allAlbums => allAlbums);
-// }
-
 const getAlbums = async () => {
     let allAlbums = [];
     let keepGoing = true;
@@ -166,16 +125,12 @@ const getAlbums = async () => {
     while (keepGoing) {
         console.log("in keepGoing");
         let response = await reqAlbums(offset);
-        //console.log("response! ", response);
         console.log("response length: ", response.items.length);
         allAlbums.push(response);
-        //await allAlbums.push(response);
-        //await allAlbums.push.apply(allAlbums, response);
         offset += 50;
         if (response.items.length < PAGE_SIZE) {
             console.log("response < page size ", response.items.length,"   ", PAGE_SIZE);
             keepGoing = false;
-            //console.log("num in allAlbums: ", allAlbums[0]);
             await Promise.all(allAlbums);
             return allAlbums;
         }
@@ -194,17 +149,11 @@ const reqAlbums = async (offset) => {
 
     try {
         let payload = await requestProm(albumRequest);
-        //console.log("payload! ", payload);
         return payload;
     } catch(err) {
         console.log("Error in reqAlbums");
     }
 }
-
-
-// end added by IRF
-
-
 
 app.get('/loginFirst', function(req, res) {
     deleteCollection();
@@ -227,19 +176,19 @@ app.get('/loginFirst', function(req, res) {
 // IRF
 app.get('/loginSecond', function(req, res) {
 
-  var state = generateRandomString(16);
-  res.cookie(stateKey, state);
+    var state = generateRandomString(16);
+    res.cookie(stateKey, state);
 
-  // your application requests authorization
-  var scope = 'user-read-private user-read-email user-library-read user-top-read';
-  res.redirect('https://accounts.spotify.com/authorize?' +
+    // your application requests authorization
+    var scope = 'user-read-private user-read-email user-library-read user-top-read';
+    res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
-      response_type: 'code',
-      client_id: client_id,
-      scope: scope,
-      redirect_uri: redirect_uri_second,
-      state: state,
-      show_dialog: true
+        response_type: 'code',
+        client_id: client_id,
+        scope: scope,
+        redirect_uri: redirect_uri_second,
+        state: state,
+        show_dialog: true
     }));
 });
 
@@ -248,8 +197,6 @@ app.get('/albumsFirst', function(req, res) {
         try {
             console.log("in the asycn func");
             allAlbums = await getAlbums(); // IRF this is the call
-            // allAlbums = getAlbums();
-            //db.musicTasteDB.insert(JSON.stringify(allAlbums));
 
             console.log(`Total length of users is ${allAlbums.length}`);
             for (var i = 0; i < allAlbums.length; i++) {
@@ -258,11 +205,6 @@ app.get('/albumsFirst', function(req, res) {
                 for (var j = 0; j < allAlbums[i].items.length; j++) {
                     console.log(allAlbums[i].items[j].album.name);
                     console.log(allAlbums[i].items[j].album.name + " by " + allAlbums[i].items[j].album.artists[0].name);
-                    var album = {
-                        name: allAlbums[i].items[j].album.name,
-                        artist: allAlbums[i].items[j].album.artists[0].name,
-                    }
-                    // window.localStorage.setItem(allAlbums[i].items[j].album.id, JSON.stringify(album));
                 }
             }
 
@@ -275,41 +217,13 @@ app.get('/albumsFirst', function(req, res) {
             //     storeInDb(data);
             // });
 
-            //console.log("first album id: ", allAlbums[0].items[0].album.id);
-            // var testing = JSON.parse(window.localStorage.getItem(allAlbums[0].items[0].album.id));
-            //console.log("ending result: ", testing);
-            //
-            // console.log("ALL ALBUMS", data);
-            // console.log("first album id: ", data.items[0].album.id);
-            // myNumAlbums = data.items.length;
-            // console.log("myNumAlbums: ", myNumAlbums);
-            // for (var x = 0; x < data.items.length; x++) {
-            //     console.log(data.items[x].album.name + " by " + data.items[x].album.artists[0].name);
-            //     var album = {
-            //         name: data.items[x].album.name,
-            //         artist: data.items[x].album.artists[0].name,
-            //     }
-            //     window.localStorage.setItem(data.items[x].album.id, JSON.stringify(album));
-            // }
-            // var testing = JSON.parse(window.localStorage.getItem(data.items[0].album.id));
-            // console.log("ending result: ", testing);
-
             var path = require('path');
             res.sendFile('second.html', { root: path.join(__dirname, 'public') });
-            //res.sendFile('Users/isabellaforman/Tufts/Local CS/SpotifyProj/authorization_code/public/index.html');
-            //res.end();
         }
         catch (e) {
             console.log("error in albumsFirst ", e);
         }
     })();
-    // console.log("beginning of albumsFirst");
-    // let allAlbums = [];
-    // //allAlbums = doSomethingCool();
-    // allAlbums = go();
-    // console.log("ALL ALBMS: ", allAlbums);
-    // console.log("after go");
-    //res.redirect('https://www.google.com');
 });
 
 
@@ -373,11 +287,6 @@ app.get('/albumsSecond', function(req, res) {
             getFromDb(async function(result) {
                 //console.log("HERE WE GO RESULT: ", result);
                 var albumsObject1 = result[0].first;
-                // console.log("firs thing: ", result[0]);
-                // //console.log("firs thing and firs: ", result[0]['first']);
-                // console.log("length (pages): ", result[0].first.length);
-                // console.log("firs thing with dot: ", result[0].first);
-                // console.log("length of albums per page: ", result[0].first[0].items.length);
                 allAlbums2 = await getAlbums();
                 var albumsObject2 = loadRelevantDataToObject(allAlbums2);
                 console.log("first as obj: ", albumsObject1);
@@ -386,24 +295,6 @@ app.get('/albumsSecond', function(req, res) {
 
                 getSimilarAlbums(albumsObject1, albumsObject2);
             });
-
-            //var firstAlbums = getFromDb();
-            //console.log("firstAlbums: ", firstAlbums);
-
-            // console.log(`Total length of users is ${allAlbums.length}`);
-            // for (var i = 0; i < allAlbums.length; i++) {
-            //     console.log("next album set");
-            //     console.log("myNumAlbums: ", allAlbums[i].items.length);
-            //     for (var j = 0; j < allAlbums[i].items.length; j++) {
-            //         console.log(allAlbums[i].items[j].album.name);
-            //         console.log(allAlbums[i].items[j].album.name + " by " + allAlbums[i].items[j].album.artists[0].name);
-            //         var album = {
-            //             name: allAlbums[i].items[j].album.name,
-            //             artist: allAlbums[i].items[j].album.artists[0].name,
-            //         }
-            //         // window.localStorage.setItem(allAlbums[i].items[j].album.id, JSON.stringify(album));
-            //     }
-            // }
 
             var path = require('path');
             res.sendFile('results.html', { root: path.join(__dirname, 'public') });
@@ -608,27 +499,27 @@ app.get('/callback', function(req, res) {
 
 app.get('/refresh_token', function(req, res) {
 
-  // requesting access token from refresh token
-  var refresh_token = req.query.refresh_token;
-  var authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
-    form: {
-      grant_type: 'refresh_token',
-      refresh_token: refresh_token
-    },
-    json: true
-  };
+    // requesting access token from refresh token
+    var refresh_token = req.query.refresh_token;
+    var authOptions = {
+        url: 'https://accounts.spotify.com/api/token',
+        headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+        form: {
+            grant_type: 'refresh_token',
+            refresh_token: refresh_token
+        },
+        json: true
+    };
 
-  request.post(authOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      var access_token = body.access_token;
-      access_token_global = access_token;
-      res.send({
-        'access_token': access_token
-      });
-    }
-  });
+    request.post(authOptions, function(error, response, body) {
+        if (!error && response.statusCode === 200) {
+            var access_token = body.access_token;
+            access_token_global = access_token;
+            res.send({
+                'access_token': access_token
+            });
+        }
+    });
 });
 
 console.log('Listening on 8888');

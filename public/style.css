@@ -40,7 +40,7 @@ body {
 
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 20px;
-    color: white;
+    color: black;
 }
 
 
@@ -52,6 +52,11 @@ body {
     color: 'black';
     font-family: 'Raleway', sans-serif;
     font-size: 95px;
+}
+#musicTasteSmallTitle {
+    color: 'black';
+    font-family: 'Raleway', sans-serif;
+    font-size: 75px;
 }
 .subheadText {
     font-family: 'Roboto Condensed', sans-serif;

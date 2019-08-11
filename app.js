@@ -266,10 +266,14 @@ app.get('/albumsFirst', function(req, res) {
                 }
             }
 
-            loadRelevantDataToObject(allAlbums, function(albumsObject) {
-                var data = {'first': albumsObject};
-                storeInDb(data);
-            });
+            var albumsObject = loadRelevantDataToObject(allAlbums);
+            var data = {'first': albumsObject};
+            storeInDb(data);
+
+            // loadRelevantDataToObject(allAlbums, function(albumsObject) {
+            //     var data = {'first': albumsObject};
+            //     storeInDb(data);
+            // });
 
             //console.log("first album id: ", allAlbums[0].items[0].album.id);
             // var testing = JSON.parse(window.localStorage.getItem(allAlbums[0].items[0].album.id));
@@ -309,37 +313,39 @@ app.get('/albumsFirst', function(req, res) {
 });
 
 
-getSimilarAlbums(firstAlbums, secondAlbums) {
+function getSimilarAlbums(firstAlbums, secondAlbums) {
     var simCount = 0;
     var similarAlbums = [];
-    for (var x = 0; x < data.items.length; x++) {
-        console.log(data.items[x].album.name + " by " + data.items[x].album.artists[0].name);
-        var result = window.localStorage.getItem(data.items[x].album.id);
-        if (result != null) {
-            console.log("SIMILAR ONE!!!!!!      ", JSON.parse(result));
+
+    for (var key in secondAlbums) {
+        // skip loop if the property is from prototype
+        if (!secondAlbums.hasOwnProperty(key)) continue;
+
+        var val = secondAlbums[key];
+        console.log("key: ", key, "val: ", val);
+
+        if (firstAlbums[key]) {
+            console.log("SIMILAR ONE!!!!!!      ", firstAlbums[key].name);
             simCount += 1;
-            similarAlbums.push(result);
+            similarAlbums.push(firstAlbums[key]);
         }
-        // var album = {
-        //     name: data.items[x].album.name,
-        //     artist: data.items[x].album.artists[0].name,
-        // }
-        //window.localStorage.setItem(data.items[x].album.id, JSON.stringify(album));
     }
-    // 7bgi7zCoDsZdlLKPonHZqP = chance
-    var testing = JSON.parse(window.localStorage.getItem('1vz94WpXDVYIEGja8cjFNa'));
-    console.log("IN YOUR TASTE: ", testing);
-    var denom = Math.max(data.items.length, myNumAlbums);
+    var firstSize = Object.keys(firstAlbums).length;
+    console.log("size fo first!! ", firstSize);
+    var secondSize = Object.keys(secondAlbums).length;
+    console.log("size of second: ", secondSize);
+    var denom = Math.max(Object.keys(firstAlbums).length, Object.keys(secondAlbums).length);
     console.log("denom: ", denom);
     console.log("PRINTING SIMILAR!!! . . .. . . .. . .. . .", simCount);
     var percentage = simCount / denom * 100;
     console.log("percentage!!!!!!!!!!!!!!", percentage, "%");
     for (var x = 0; x < similarAlbums.length; x++) {
-        console.log(JSON.parse(similarAlbums[x]));
+        console.log(similarAlbums[x].name + " by " + similarAlbums[x].artist);
     }
 }
 
-function loadRelevantDataToObject(allAlbums, callback) {
+// function loadRelevantDataToObject(allAlbums, callback) {
+function loadRelevantDataToObject(allAlbums) {
     var albumsObject = {};
     var pages = allAlbums.length;
     console.log("pages in load!!! ", pages);
@@ -353,7 +359,8 @@ function loadRelevantDataToObject(allAlbums, callback) {
             albumsObject[allAlbums[i].items[j].album.id] = value;
         }
     }
-    callback(albumsObject);
+    //callback(albumsObject);
+    return albumsObject;
 }
 
 
@@ -364,15 +371,20 @@ app.get('/albumsSecond', function(req, res) {
             //allAlbums2 = await getAlbums(); // IRF this is the call
 
             getFromDb(async function(result) {
-                console.log("HERE WE GO RESULT: ", result);
+                //console.log("HERE WE GO RESULT: ", result);
+                var albumsObject1 = result[0].first;
                 // console.log("firs thing: ", result[0]);
                 // //console.log("firs thing and firs: ", result[0]['first']);
                 // console.log("length (pages): ", result[0].first.length);
                 // console.log("firs thing with dot: ", result[0].first);
                 // console.log("length of albums per page: ", result[0].first[0].items.length);
                 allAlbums2 = await getAlbums();
-                console.log("second albyms!!!!: ", allAlbums2);
-                //getSimilarAlbums(result, allAlbums2);
+                var albumsObject2 = loadRelevantDataToObject(allAlbums2);
+                console.log("first as obj: ", albumsObject1);
+                console.log("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ MIDDEL ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+                console.log("second albyms!!!!: ", albumsObject2);
+
+                getSimilarAlbums(albumsObject1, albumsObject2);
             });
 
             //var firstAlbums = getFromDb();

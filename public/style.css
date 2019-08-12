@@ -42,7 +42,10 @@ body {
     font-size: 20px;
     color: black;
 }
-
+#yourLogin, #yourTaste, #friendLogin {
+    position: relative;
+    top: 50px;
+}
 
 
 
@@ -58,20 +61,38 @@ body {
     font-family: 'Raleway', sans-serif;
     font-size: 75px;
 }
-.subheadText {
+#list {
+    list-style-type: none;
+}
+.largeText {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 55px;
+    color: #214a1b;
+}
+.medText {
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 40px;
     color: #214a1b;
 }
-.regText {
+.smallText {
     font-family: 'Roboto Condensed', sans-serif;
-    font-size: 20px;
+    font-size: 30px;
+}
+.smallerText {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 18px;
 }
 .text-overflow {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 500px;
+}
+a {
+    text-decoration: none;
+}
+#percentResult {
+    color: #661e2b
 }
 
 

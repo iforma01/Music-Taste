@@ -48,6 +48,8 @@ var stateKey = 'spotify_auth_state';
 
 var app = express();
 
+app.set('view engine', 'ejs');
+
 app.use(express.static(__dirname + '/public'))
     .use(cors())
     .use(cookieParser());
@@ -256,6 +258,8 @@ function getSimilarAlbums(firstAlbums, secondAlbums) {
     for (var x = 0; x < similarAlbums.length; x++) {
         console.log(similarAlbums[x].name + " by " + similarAlbums[x].artist);
     }
+
+    return {percentSimilar: percentage, similarList: similarAlbums};
 }
 
 // function loadRelevantDataToObject(allAlbums, callback) {
@@ -293,11 +297,18 @@ app.get('/albumsSecond', function(req, res) {
                 console.log("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ MIDDEL ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
                 console.log("second albyms!!!!: ", albumsObject2);
 
-                getSimilarAlbums(albumsObject1, albumsObject2);
+                var results = getSimilarAlbums(albumsObject1, albumsObject2);
+                res.render('results', {percentage: results.percentSimilar, similarList: results.similarList});
             });
 
-            var path = require('path');
-            res.sendFile('results.html', { root: path.join(__dirname, 'public') });
+            // var path = require('path');
+            // res.sendFile('results.html', { root: path.join(__dirname, 'public') });
+
+            //res.render('/public/results.html');
+            //res.render(__dirname + '/public/results.html', {name:'isabella'});
+            //res.render('results.html', { root: path.join(__dirname, 'public') });
+
+
         }
         catch (e) {
             console.log("error in albumsSecond ", e);

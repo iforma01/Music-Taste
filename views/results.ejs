@@ -9,10 +9,10 @@
     <body>
         <div class="container">
             <h1 id="musicTasteSmallTitle">Music Taste</h1>
-            <p class="smallText">Cool music taste ;)</p><p class="smallText">Now let's have your friend log in!</p>
-            <div id="switch">
-                <a href="/loginSecond" class="buttonLogin" id="friendLogin">Friend login to Spotify!</a>
-            </div>
+            <p class=smallText>Your music taste is</p><p class="largeText" id="percentResult"><span style="color:#a84356;font-size:85px;font-weight:800"><%=percentage%>% </span>similar</p>
+            <p class="smallText">Albums in Common:</p>
+            <ul id=list class="smallerText"><%similarList.forEach(function(album) { %><li><%=album.name %> - <%= album.artist%></li><% }); %></ul>
+
         </div>
 
 

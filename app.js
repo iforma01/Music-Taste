@@ -12,18 +12,16 @@ var request = require('request'); // "Request" library
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
-
-var client_id = 'f3e7cb4befa4414cb8066485f4e19c07'; // Your client id
-var client_secret = '9b78d1da5b484390986c1a6718516735'; // Your secret
-var redirect_uri_first = 'http://localhost:8888/callback'; // Your redirect uri
-var redirect_uri_second = 'http://localhost:8888/secondMusic';
-
-// added by IRF
-//require('dotenv').config();
 const requestProm = require('request-promise');
+require('dotenv').config();
+
+
+const CLIENT_ID = process.env.CLIENT_ID; // Your client id
+const CLIENT_SECRET = process.env.CLIENT_SECRET; // Your secret
+const PORT = process.env.PORT || 8888;
+const REDIRECT_URI_FIRST = 'http://localhost:8888/callback'; // Your redirect uri
+const REDIRECT_URI_SECOND = 'http://localhost:8888/secondMusic';
 const API_ENDPOINT = `https://api.spotify.com`;
-//const CLIENT_ID = process.env.LMS_CLIENT_ID; // Loaded from our .env file
-//const CLIENT_SECRET = process.env.LMS_CLIENT_SECRET; // Loaded from our .env file
 const PAGE_SIZE = 50; // How many records the API returns in a page.
 
 var access_token_global = ''; // TO DO don't keep it global and ahrd coded!!
@@ -57,12 +55,12 @@ app.use(express.static(__dirname + '/public'))
 // Database IRF
 
 // start added by IRF
-var mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/musicTasteDB';
+var mongoUri = process.env.MONGODB_URI;
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;
 var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, databaseConnection) {
     console.log("in monogodb connection!!!");
 	db = databaseConnection.db('musicTasteDB');
-    const collection = db.collection('first');
+    const collection = db.collection('firstUser');
     collection.insertOne({name: 'Roger'}, (err, result) => {
         console.log("we in here");
     })
@@ -75,31 +73,28 @@ var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, 
 
 function storeInDb(data) {
     console.log("in store function");
-    var mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/musicTasteDB';
+    var mongoUri = process.env.MONGODB_URI;
     var MongoClient = require('mongodb').MongoClient, format = require('util').format;
     var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, databaseConnection) {
         console.log("in monogodb connection!!!");
     	db = databaseConnection.db('musicTasteDB');
-        const collection = db.collection('first');
+        const collection = db.collection('SpotifyUser');
         collection.insertOne(data, (err, result) => {
             console.log("we in here function");
         })
     });
-
-    //callback();
 }
 
 async function getFromDb(callback) {
     console.log("in get function");
-    var mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/musicTasteDB';
+    var mongoUri = process.env.MONGODB_URI;
     var MongoClient = require('mongodb').MongoClient, format = require('util').format;
     var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, databaseConnection) {
         console.log("in monogodb connection!!!");
     	db = databaseConnection.db('musicTasteDB');
-        const collection = db.collection('first');
+        const collection = db.collection('SpotifyUser');
         collection.find({}).toArray(function(err, result) {
             if (err) throw err;
-            //return result;
             callback(result);
         });
     });
@@ -107,12 +102,12 @@ async function getFromDb(callback) {
 
 function deleteCollection() {
     console.log("in get function");
-    var mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/musicTasteDB';
+    var mongoUri = process.env.MONGODB_URI;
     var MongoClient = require('mongodb').MongoClient, format = require('util').format;
     var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, databaseConnection) {
         console.log("in monogodb connection!!!");
     	db = databaseConnection.db('musicTasteDB');
-        const collection = db.collection('first');
+        const collection = db.collection('SpotifyUser');
         collection.drop(function(err, delOK) {
             if (err) throw err;
             if (delOK) console.log("Collection deleted");
@@ -168,10 +163,11 @@ app.get('/loginFirst', function(req, res) {
     res.redirect('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
             response_type: 'code',
-            client_id: client_id,
+            client_id: CLIENT_ID,
             scope: scope,
-            redirect_uri: redirect_uri_first,
-            state: state
+            redirect_uri: REDIRECT_URI_FIRST,
+            state: state,
+            show_dialog: true
         }));
 });
 
@@ -186,9 +182,9 @@ app.get('/loginSecond', function(req, res) {
     res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
         response_type: 'code',
-        client_id: client_id,
+        client_id: CLIENT_ID,
         scope: scope,
-        redirect_uri: redirect_uri_second,
+        redirect_uri: REDIRECT_URI_SECOND,
         state: state,
         show_dialog: true
     }));
@@ -211,11 +207,11 @@ app.get('/albumsFirst', function(req, res) {
             }
 
             var albumsObject = loadRelevantDataToObject(allAlbums);
-            var data = {'first': albumsObject};
+            var data = {'firstUser': albumsObject};
             storeInDb(data);
 
             // loadRelevantDataToObject(allAlbums, function(albumsObject) {
-            //     var data = {'first': albumsObject};
+            //     var data = {'firstUser': albumsObject};
             //     storeInDb(data);
             // });
 
@@ -253,7 +249,8 @@ function getSimilarAlbums(firstAlbums, secondAlbums) {
     var denom = Math.max(Object.keys(firstAlbums).length, Object.keys(secondAlbums).length);
     console.log("denom: ", denom);
     console.log("PRINTING SIMILAR!!! . . .. . . .. . .. . .", simCount);
-    var percentage = simCount / denom * 100;
+    var percentage = Math.round(simCount / denom * 100 * 100) / 100;
+    //var percentage = simCount / denom * 100;
     console.log("percentage!!!!!!!!!!!!!!", percentage, "%");
     for (var x = 0; x < similarAlbums.length; x++) {
         console.log(similarAlbums[x].name + " by " + similarAlbums[x].artist);
@@ -290,7 +287,7 @@ app.get('/albumsSecond', function(req, res) {
 
             getFromDb(async function(result) {
                 //console.log("HERE WE GO RESULT: ", result);
-                var albumsObject1 = result[0].first;
+                var albumsObject1 = result[0].firstUser;
                 allAlbums2 = await getAlbums();
                 var albumsObject2 = loadRelevantDataToObject(allAlbums2);
                 console.log("first as obj: ", albumsObject1);
@@ -329,7 +326,7 @@ app.get('/albumsSecond', function(req, res) {
     //     json: true
     // }).done(function(data) {
     //     console.log("ALL ALBUMS", data);
-    //     console.log("first album id: ", data.items[0].album.id);
+    //     console.log("firstUser album id: ", data.items[0].album.id);
     //     console.log("LENGTH: ", data.items.length);
     //     var simCount = 0;
     //     var similarAlbums = [];
@@ -385,11 +382,11 @@ app.get('/secondMusic', function(req, res) {
             url: 'https://accounts.spotify.com/api/token',
             form: {
                 code: code,
-                redirect_uri: redirect_uri_second,
+                redirect_uri: REDIRECT_URI_SECOND,
                 grant_type: 'authorization_code'
             },
             headers: {
-                'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+                'Authorization': 'Basic ' + (new Buffer(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))
             },
             json: true
         };
@@ -464,11 +461,11 @@ app.get('/callback', function(req, res) {
             url: 'https://accounts.spotify.com/api/token',
             form: {
                 code: code,
-                redirect_uri: redirect_uri_first,
+                redirect_uri: REDIRECT_URI_FIRST,
                 grant_type: 'authorization_code'
             },
             headers: {
-                'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+                'Authorization': 'Basic ' + (new Buffer(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))
             },
             json: true
         };
@@ -514,7 +511,7 @@ app.get('/refresh_token', function(req, res) {
     var refresh_token = req.query.refresh_token;
     var authOptions = {
         url: 'https://accounts.spotify.com/api/token',
-        headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+        headers: { 'Authorization': 'Basic ' + (new Buffer(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64')) },
         form: {
             grant_type: 'refresh_token',
             refresh_token: refresh_token
@@ -533,8 +530,8 @@ app.get('/refresh_token', function(req, res) {
     });
 });
 
-console.log('Listening on 8888');
-app.listen(8888);
+console.log('Listening on port: ', PORT);
+app.listen(PORT);
 
 /*
 first user signs in

@@ -70,6 +70,22 @@ var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, 
     })
 });
 
+const getTopArtists = async () => {
+    console.log("in get top artsts")
+    const topRequest = {
+        url: `https://api.spotify.com/v1/me/top/artists?limit=5`,
+        json: true,
+        headers: { 'Authorization': 'Bearer ' + access_token_global },
+    };
+
+    try {
+        let payload = await requestProm(topRequest);
+        return payload;
+    } catch(err) {
+        console.log("Error in getTopArtists");
+    }
+}
+
 
 function storeInDb(data) {
     console.log("in store function");
@@ -78,7 +94,7 @@ function storeInDb(data) {
     var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, databaseConnection) {
         console.log("in monogodb connection!!!");
     	db = databaseConnection.db('musicTasteDB');
-        const collection = db.collection('SpotifyUser');
+        const collection = db.collection('firstUser');
         collection.insertOne(data, (err, result) => {
             console.log("we in here function");
         })
@@ -92,7 +108,7 @@ async function getFromDb(callback) {
     var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, databaseConnection) {
         console.log("in monogodb connection!!!");
     	db = databaseConnection.db('musicTasteDB');
-        const collection = db.collection('SpotifyUser');
+        const collection = db.collection('firstUser');
         collection.find({}).toArray(function(err, result) {
             if (err) throw err;
             callback(result);
@@ -107,11 +123,29 @@ function deleteCollection() {
     var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, databaseConnection) {
         console.log("in monogodb connection!!!");
     	db = databaseConnection.db('musicTasteDB');
-        const collection = db.collection('SpotifyUser');
-        collection.drop(function(err, delOK) {
-            if (err) throw err;
-            if (delOK) console.log("Collection deleted");
+        db.listCollections().toArray(function(err, collInfos) {
+            console.log(collInfos);
+            for (var i = 0; i < collInfos.length; i++) {
+                if (collInfos[i].name == 'firstUser') {
+                    console.log("YEAHHH it's here");
+                    const collection = db.collection('firstUser');
+                    collection.drop(function(err, delOK) {
+                        if (err) throw err;
+                        if (delOK) console.log("Collection deleted");
+                    });
+                    db.listCollections().toArray(function(err, collInfos) {
+                        console.log(collInfos);
+                    });
+                } else {
+                    console.log("NOPE");
+                }
+            }
         });
+        // const collection = db.collection('SpotifyUser');
+        // collection.drop(function(err, delOK) {
+        //     if (err) throw err;
+        //     if (delOK) console.log("Collection deleted");
+        // });
     });
 }
 
@@ -210,13 +244,15 @@ app.get('/albumsFirst', function(req, res) {
             var data = {'firstUser': albumsObject};
             storeInDb(data);
 
-            // loadRelevantDataToObject(allAlbums, function(albumsObject) {
-            //     var data = {'firstUser': albumsObject};
-            //     storeInDb(data);
-            // });
+            var top5First = await getTopArtists();
+            console.log("Top artists: ")
+            var top5FirstList = []
+            for (var i = 0; i < top5First.items.length; i++) {
+                console.log(top5First.items[i].name);
+                top5FirstList.push(top5First.items[i].name);
+            }
 
-            var path = require('path');
-            res.sendFile('second.html', { root: path.join(__dirname, 'public') });
+            res.render('top5First', {top5List: top5FirstList});
         }
         catch (e) {
             console.log("error in albumsFirst ", e);
@@ -278,6 +314,23 @@ function loadRelevantDataToObject(allAlbums) {
     return albumsObject;
 }
 
+app.get('/top5Second', function(req, res) {
+    (async () => {
+        try {
+            var top5Second = await getTopArtists();
+            console.log("Top artists: ")
+            var top5SecondList = []
+            for (var i = 0; i < top5Second.items.length; i++) {
+                console.log(top5Second.items[i].name);
+                top5SecondList.push(top5Second.items[i].name);
+            }
+
+            res.render('top5Second', {top5List: top5SecondList});
+        } catch (e) {
+            console.log("Error in top5Second: ", e);
+        }
+    })();
+});
 
 app.get('/albumsSecond', function(req, res) {
     (async () => {
@@ -421,8 +474,7 @@ app.get('/secondMusic', function(req, res) {
                 //     refresh_token: refresh_token
                 // }));
 
-                var path = require('path');
-                res.sendFile('secondMusic.html', { root: path.join(__dirname, 'public') });
+                res.render('second');
             } else {
                 console.log("dad");
                 res.redirect('/#' +
@@ -433,8 +485,6 @@ app.get('/secondMusic', function(req, res) {
         });
     }
 
-    // var path = require('path');
-    // res.sendFile('secondMusic.html', { root: path.join(__dirname, 'public') });
 });
 
 

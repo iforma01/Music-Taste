@@ -9,9 +9,12 @@
     <body>
         <div class="container">
             <h1 id="musicTasteSmallTitle">Music Taste</h1>
-            <p class="smallText">Your friend has successfully logged in. Let's get their music.</p>
+            <p class="smallText">Your Friend's Top Artists:</p>
+            <ol id="listTop5" class="smallerText"><%top5List.forEach(function(artist){%><li><%=artist%></li><%});%></ol>
+
+            <p class="smallText">Ready to find out your music taste compatibility?</p>
             <div id="second">
-                <a href="/top5Second" class="buttonTaste" id="yourTaste">What's your friend's music taste?</a>
+                <a href="/albumsSecond" class="buttonTaste" id="compare">Compare Spotify Libraries</a>
             </div>
         </div>
 

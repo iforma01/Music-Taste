@@ -24,6 +24,7 @@ body {
     padding: 20px;
     width: 270px;
     height: 70px;
+    cursor:pointer;
 
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 20px;
@@ -37,14 +38,19 @@ body {
     padding: 20px;
     width: 270px;
     height: 70px;
+    cursor:pointer;
 
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 20px;
     color: black;
 }
-#yourLogin, #yourTaste, #friendLogin {
+#yourLogin, #yourTaste {
     position: relative;
     top: 50px;
+}
+#friendLogin, #compare {
+    position: relative;
+    top: 20px;
 }
 
 
@@ -63,6 +69,30 @@ body {
 }
 #list {
     list-style-type: none;
+    text-align: center;
+}
+#listTop5 {
+    /* list-style-type: none; */
+    text-align: center;
+}
+ol {
+    list-style-position: inside;
+    display: block;
+    list-style-type: decimal;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-left: 0px;
+}
+ul {
+    display: block;
+    list-style-type: decimal;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-left: 0px;
 }
 .largeText {
     font-family: 'Roboto Condensed', sans-serif;

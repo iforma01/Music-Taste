@@ -1,3 +1,10 @@
+<!--
+Isabella Forman
+August 2019
+Music Taste
+top5First.ejs
+-->
+
 <!doctype html>
 <html>
     <head>
@@ -10,17 +17,16 @@
         <div class="container">
             <h1 id="musicTasteSmallTitle">Music Taste</h1>
             <p class="smallText">Cool music taste ;)</p>
-            <p class="smallText">Your Top Artists:</p>
-            <div class="centerList">
-                <ol id="listTop5" class="smallerText"><%top5List.forEach(function(artist){%><li><%=artist%></li><%});%></ol>
+            <div class="card">
+                <p class="smallText" id="topArtistsFirst">Your Top Artists:</p>
+                <ol id="listTop5First" class="smallerText"><%top5List.forEach(function(artist){%><li><%=artist%></li><%});%></ol>
             </div>
 
-            <p class="smallText">Now let's have your friend log in! (On the next page, scroll down to click "Agree")</p>
+            <p class="smallText">Now let's have your friend log in!</p>
+            <p class="smallerText">(On the next page, scroll down to click "Agree")</p>
             <div id="switch">
                 <a href="/loginSecond" class="buttonLogin" id="friendLogin">Friend login to Spotify!</a>
             </div>
         </div>
-
-
     </body>
 </html>

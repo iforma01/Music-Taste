@@ -1,21 +1,16 @@
+<!--
+Isabella Forman
+August 2019
+Music Taste
+index.html
+-->
+
 <!doctype html>
 <html>
     <head>
         <title>Music Taste</title>
-        <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"> -->
         <link rel="stylesheet" href="style.css" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Raleway:800|Roboto+Condensed&display=swap" rel="stylesheet">
-        <!-- <style type="text/css">
-            #login, #loggedin {
-                display: none;
-            }
-            .text-overflow {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                width: 500px;
-            }
-        </style> -->
     </head>
 
     <body>
@@ -23,58 +18,16 @@
             <h1 id="musicTasteTitle">Music Taste</h1>
             <div id="login">
                 <p class="largeText">How similar is your music taste?</p><p class="medText">Compare Spotify libraries with your friends</p>
-                <p class="smallerText">Click to login, and on the next page, scroll down to click "Agree"</p>
+                <p class="smallerText" id="clickInstrIndex">Click to log in, and on the next page, scroll down to click "Agree"</p>
                 <a href="/loginFirst" class="buttonLogin" id="yourLogin">Log in with Spotify</a>
             </div>
             <div id="loggedin">
-                <!-- <div id="user-profile">
-                </div> -->
-                <!-- <div id="oauth">
-                </div> -->
-                <!-- <button class="buttonTaste" id="myTaste">
-                    <p class="buttonText">What's my music taste?</p>
-                </button> -->
                 <p class="smallText">You're logged in, let's start!</p>
                 <div id="first">
-                    <button class="buttonTaste" id="myTaste">What's my music taste?</button>
+                    <a href="/albumsFirst" class="buttonTaste" id="myTaste">What's my music taste?</a>
                 </div>
-                <!-- <div id="switch">
-                    <a href="/loginSecond" class="buttonLogin" id="yourLogin">Friend login!</a>
-                </div> -->
-                <!-- <div id="second">
-                    <button class="buttonTaste" id="yourTaste">What's your friend's music taste?</button>
-                </div> -->
             </div>
         </div>
-
-        <!-- <script id="user-profile-template" type="text/x-handlebars-template">
-            <h1>Logged in as {{display_name}}</h1>
-            <div class="media">
-                <div class="pull-left">
-                    <img class="media-object" width="150" src="{{images.0.url}}" />
-                </div>
-                <div class="media-body">
-                    <dl class="dl-horizontal">
-                        <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
-                        <dt>Id</dt><dd>{{id}}</dd>
-                        <dt>Email</dt><dd>{{email}}</dd>
-                        <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
-                        <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
-                        <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
-                        <dt>Country</dt><dd>{{country}}</dd>
-                    </dl>
-                </div>
-            </div>
-        </script> -->
-
-        <!-- <script id="oauth-template" type="text/x-handlebars-template">
-            <h2>oAuth info</h2>
-            <dl class="dl-horizontal">
-                <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
-                <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}</dd>
-                <dt>Album title</dt><dd class="text-overflow">{{album_title}}</dd>
-            </dl>
-        </script> -->
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -97,14 +50,6 @@
                     return hashParams;
                 }
 
-                // var userProfileSource = document.getElementById('user-profile-template').innerHTML,
-                //     userProfileTemplate = Handlebars.compile(userProfileSource),
-                //     userProfilePlaceholder = document.getElementById('user-profile');
-
-                // var oauthSource = document.getElementById('oauth-template').innerHTML,
-                //     oauthTemplate = Handlebars.compile(oauthSource),
-                //     oauthPlaceholder = document.getElementById('oauth');
-
                 var params = getHashParams();
 
                 var access_token = params.access_token,
@@ -115,216 +60,21 @@
                     alert('There was an error during the authentication');
                 } else {
                     if (access_token) {
-                        // render oauth info
-                        // oauthPlaceholder.innerHTML = oauthTemplate({
-                        //     access_token: access_token,
-                        //     refresh_token: refresh_token
-                        // });
-
                         $.ajax({
                             url: 'https://api.spotify.com/v1/me',
                             headers: {
                                 'Authorization': 'Bearer ' + access_token
                             },
                             success: function(response) {
-                                console.log("response about me", response);
-                                console.log("YOUR ID ", response.id);
                                 spotifyId = response.id;
-                                // userProfilePlaceholder.innerHTML = userProfileTemplate(response);
                                 $('#login').hide();
                                 $('#loggedin').show();
-                                // if (secondLoggedIn) {
-                                //     $("switch").hide();
-                                //     $("second").show();
-                                // }
                             }
                         });
                     } else {
-                        // render initial screen
                         $('#login').show();
                         $('#loggedin').hide();
                     }
-
-                    // document.getElementById('obtain-new-token').addEventListener('click', function() {
-                    //     $.ajax({
-                    //         url: '/refresh_token',
-                    //         data: {
-                    //             'refresh_token': refresh_token
-                    //         }
-                    //     }).done(function(data) {
-                    //         access_token = data.access_token;
-                    //         // oauthPlaceholder.innerHTML = oauthTemplate({
-                    //         //     access_token: access_token,
-                    //         //     refresh_token: refresh_token
-                    //         // });
-                    //     });
-                    // }, false);
-
-                    // ADDED BY ME IRF
-
-
-
-
-                    document.getElementById('myTaste').addEventListener('click', function() {
-                        window.location.href = '/albumsFirst';
-                        console.log("ok ok ok ok ladies");
-
-
-
-
-
-
-
-
-
-
-                        /* . . . . . . . . . . . . . . . . . . . . . . . . .*/
-                        /*
-                        var albumsUrl = 'https://api.spotify.com/v1/me/albums';
-
-                        var i = 0;
-                        var ready = true;
-                        while ((ready) && (albumsUrl != null) && (i < 5)) {
-                            ready = false;
-                            console.log("IN LOOP!!!!", albumsUrl);
-                            $.ajax({
-                                url: albumsUrl,
-                                headers: { 'Authorization': 'Bearer ' + access_token },
-                                data: {
-                                    limit: 50
-                                },
-                                json: true
-                            }).done(function(data) {
-                                console.log("ALL ALBUMS", data);
-                                console.log("first album id: ", data.items[0].album.id);
-                                myNumAlbums += data.items.length;
-                                console.log("myNumAlbums: ", myNumAlbums);
-                                for (var x = 0; x < data.items.length; x++) {
-                                    console.log(data.items[x].album.name + " by " + data.items[x].album.artists[0].name);
-                                    var album = {
-                                        name: data.items[x].album.name,
-                                        artist: data.items[x].album.artists[0].name,
-                                    }
-                                    window.localStorage.setItem(data.items[x].album.id, JSON.stringify(album));
-                                }
-                                var testing = JSON.parse(window.localStorage.getItem(data.items[0].album.id));
-                                console.log("ending result: ", testing);
-                                console.log("next url roses: ", data.next);
-                                albumsUrl = data.next;
-                            });
-                            i+=1;
-                            ready = true;
-                        }
-                        */
-
-                        //$("first").hide();
-                        // $("switch").show();
-
-                        // $.ajax({
-                        //     //url: 'https://api.spotify.com/v1/albums/6KSvWFf4g4PrIldtchJsTC',
-                        //     url: 'https://api.spotify.com/v1/me/albums',
-                        //     headers: { 'Authorization': 'Bearer ' + access_token },
-                        //     data: {
-                        //         limit: 50
-                        //     },
-                        //     json: true
-                        // }).done(function(data) {
-                        //     console.log("ALL ALBUMS", data);
-                        //     console.log("first album id: ", data.items[0].album.id);
-                        //     myNumAlbums = data.items.length;
-                        //     console.log("myNumAlbums: ", myNumAlbums);
-                        //     for (var x = 0; x < data.items.length; x++) {
-                        //         console.log(data.items[x].album.name + " by " + data.items[x].album.artists[0].name);
-                        //         var album = {
-                        //             name: data.items[x].album.name,
-                        //             artist: data.items[x].album.artists[0].name,
-                        //         }
-                        //         window.localStorage.setItem(data.items[x].album.id, JSON.stringify(album));
-                        //     }
-                        //     var testing = JSON.parse(window.localStorage.getItem(data.items[0].album.id));
-                        //     console.log("ending result: ", testing);
-                        //     // var num = Math.floor(Math.random() * 20);
-                        //     // console.log(num)
-                        //     // console.log(data.items[num].album.name)
-                        //     // album_title = 'here'
-                        //     // oauthPlaceholder.innerHTML = oauthTemplate({
-                        //     //     album_title: album_title
-                        //     // });
-                        //
-                        //     if (data.next != null) {
-                        //         $.ajax({
-                        //             url: data.next,
-                        //             headers: { 'Authorization': 'Bearer ' + access_token },
-                        //             data: {
-                        //                 limit: 50
-                        //             },
-                        //             json: true
-                        //         })
-                        //     }
-                        // });
-                    }, false);
-
-                    // document.getElementById('yourTaste').addEventListener('click', function() {
-                    //     $.ajax({
-                    //         //url: 'https://api.spotify.com/v1/albums/6KSvWFf4g4PrIldtchJsTC',
-                    //         url: 'https://api.spotify.com/v1/me/albums',
-                    //         headers: { 'Authorization': 'Bearer ' + access_token },
-                    //         data: {
-                    //             limit: 50
-                    //         },
-                    //         json: true
-                    //     }).done(function(data) {
-                    //         console.log("ALL ALBUMS", data);
-                    //         console.log("first album id: ", data.items[0].album.id);
-                    //         console.log("LENGTH: ", data.items.length);
-                    //         var simCount = 0;
-                    //         var similarAlbums = [];
-                    //         for (var x = 0; x < data.items.length; x++) {
-                    //             console.log(data.items[x].album.name + " by " + data.items[x].album.artists[0].name);
-                    //             var result = window.localStorage.getItem(data.items[x].album.id);
-                    //             if (result != null) {
-                    //                 console.log("SIMILAR ONE!!!!!!      ", JSON.parse(result));
-                    //                 simCount += 1;
-                    //                 similarAlbums.push(result);
-                    //             }
-                    //             // var album = {
-                    //             //     name: data.items[x].album.name,
-                    //             //     artist: data.items[x].album.artists[0].name,
-                    //             // }
-                    //             //window.localStorage.setItem(data.items[x].album.id, JSON.stringify(album));
-                    //         }
-                    //         // 7bgi7zCoDsZdlLKPonHZqP = chance
-                    //         var testing = JSON.parse(window.localStorage.getItem('1vz94WpXDVYIEGja8cjFNa'));
-                    //         console.log("IN YOUR TASTE: ", testing);
-                    //         var denom = Math.max(data.items.length, myNumAlbums);
-                    //         console.log("denom: ", denom);
-                    //         console.log("PRINTING SIMILAR!!! . . .. . . .. . .. . .", simCount);
-                    //         var percentage = simCount / denom * 100;
-                    //         console.log("percentage!!!!!!!!!!!!!!", percentage, "%");
-                    //         for (var x = 0; x < similarAlbums.length; x++) {
-                    //             console.log(JSON.parse(similarAlbums[x]));
-                    //         }
-                    //         window.localStorage.clear();
-                    //     });
-                    // }, false);
-
-                    // document.getElementById('get-album').addEventListener('click', function() {
-                    //     $.ajax({
-                    //         //url: 'https://api.spotify.com/v1/albums/6KSvWFf4g4PrIldtchJsTC',
-                    //         url: 'https://api.spotify.com/v1/me/top/tracks',
-                    //         headers: { 'Authorization': 'Bearer ' + access_token },
-                    //         json: true
-                    //     }).done(function(data) {
-                    //         console.log("HI HERE I AM", data);
-                    //         // var num = Math.floor(Math.random() * 20);
-                    //         // console.log(num)
-                    //         // console.log(data.items[num].album.name)
-                    //         album_title = 'here'
-                    //         // oauthPlaceholder.innerHTML = oauthTemplate({
-                    //         //     album_title: album_title
-                    //         // });
-                    //     });
-                    // }, false);
                 }
             })();
         </script>

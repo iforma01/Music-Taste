@@ -1,3 +1,10 @@
+<!--
+Isabella Forman
+August 2019
+Music Taste
+top5Second.ejs
+-->
+
 <!doctype html>
 <html>
     <head>
@@ -9,9 +16,10 @@
     <body>
         <div class="container">
             <h1 id="musicTasteSmallTitle">Music Taste</h1>
-            <p class="smallText">Your Friend's Top Artists:</p>
-            <ol id="listTop5" class="smallerText"><%top5List.forEach(function(artist){%><li><%=artist%></li><%});%></ol>
-
+            <div class="card">
+                <p class="smallText" id="topArtistsSecond">Your Friend's Top Artists:</p>
+                <ol id="listTop5Second" class="smallerText"><%top5List.forEach(function(artist){%><li><%=artist%></li><%});%></ol>
+            </div>
             <p class="smallText">Ready to find out your music taste compatibility?</p>
             <div id="second">
                 <a href="/albumsSecond" class="buttonTaste" id="compare">Compare Spotify Libraries</a>
@@ -48,25 +56,17 @@
                     alert('There was an error during the authentication for second user');
                 } else {
                     if (access_token) {
-                        // render oauth info
-                        // oauthPlaceholder.innerHTML = oauthTemplate({
-                        //     access_token: access_token,
-                        //     refresh_token: refresh_token
-                        // });
-
                         $.ajax({
                             url: 'https://api.spotify.com/v1/me',
                             headers: {
                                 'Authorization': 'Bearer ' + access_token
                             },
                             success: function(response) {
-                                //console.log("response about me", response);
-                                console.log("YOUR ID in secondMusic", response.id);
                                 spotifyId = response.id;
                             }
                         });
                     } else {
-                        console.log("twinkle twinkle little star");
+                        console.log("Error with access_token");
                     }
                 }
             })();

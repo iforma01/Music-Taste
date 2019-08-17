@@ -14,14 +14,14 @@ results.ejs
     </head>
 
     <body>
-        <div class="thinBar"></div>
-        <div class="bar"></div>
+        <div class="thinBar colorThin"></div>
+        <div class="bar colorThick"></div>
         <div class="container">
             <h1 id="musicTasteSmallTitle">Music Taste</h1>
-            <p class="smallText" id="spotifyLibrariesAre">Your Spotify libraries are</p><p class="largeText" id="percentResult"><span style="color:#a84356;font-size:85px;font-weight:800"><%=percentage%>% </span>similar</p>
-            <div id="cardResults">
-                <p id="commonAlbums">Albums in Common:</p>
-                <ul id="list" class="smallerText"><%similarList.forEach(function(album){%><li><%=album.name %> - <%= album.artist%></li><%});%></ul>
+            <p class="smallText colorAltText" id="spotifyLibrariesAre">Your Spotify libraries are</p><p class="largeText" id="percentResult"><span style="color:#DD614A;font-size:85px;font-weight:800"><%=percentage%>% </span>similar</p>
+            <div class="colorCard" id="cardResults">
+                <p class="colorAltText" id="commonAlbums">Albums in Common:</p>
+                <ul id="list" class="smallerText colorAltText"><%similarList.forEach(function(album){%><li><%=album.name %> - <%= album.artist%></li><%});%></ul>
             </div>
         </div>
     </body>

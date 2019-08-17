@@ -14,19 +14,19 @@ top5First.ejs
     </head>
 
     <body>
-        <div class="thinBar"></div>
-        <div class="bar"></div>
+        <div class="thinBar colorThin"></div>
+        <div class="bar colorThick"></div>
         <div class="container">
             <h1 id="musicTasteSmallTitle">Music Taste</h1>
-            <div class="card">
-                <p class="smallText" id="topArtistsFirst">Your Top Artists:</p>
-                <ol id="listTop5First" class="smallerText"><%top5List.forEach(function(artist){%><li><%=artist%></li><%});%></ol>
+            <div class="card colorCard">
+                <p class="smallText colorAltText" id="topArtistsFirst">Your Top Artists:</p>
+                <ol id="listTop5First" class="smallerText colorAltText"><%top5List.forEach(function(artist){%><li><%=artist%></li><%});%></ol>
             </div>
 
             <p class="smallText">Now let's have your friend log in!</p>
-            <p class="smallerText" id="clickInstrTop5">(On the next page, scroll down to click "Agree")</p>
+            <p class="smallerText" id="clickInstrTop5">(On the next page, click "Not you?" to let your friend sign in with their account. Then scroll down to click "Agree")</p>
             <div id="switch">
-                <a href="/loginSecond" class="buttonLogin" id="friendLogin">FRIEND LOGIN TO SPOTIFY!</a>
+                <a href="/loginSecond" class="buttonLogin colorThick" id="friendLogin">FRIEND LOGIN TO SPOTIFY!</a>
             </div>
         </div>
     </body>

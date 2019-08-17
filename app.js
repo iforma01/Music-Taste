@@ -89,6 +89,7 @@ function storeInDb(data) {
         const collection = db.collection('firstUser');
         collection.insertOne(data, (err, result) => {
             if (err) throw err;
+            databaseConnection.close();
         })
     });
 }
@@ -101,6 +102,7 @@ async function getFromDb(callback) {
         const collection = db.collection('firstUser');
         collection.find({}).toArray(function(err, result) {
             if (err) throw err;
+            databaseConnection.close();
             callback(result);
         });
     });
@@ -110,14 +112,20 @@ function deleteCollection() {
     var mongoUri = process.env.MONGODB_URI;
     var MongoClient = require('mongodb').MongoClient, format = require('util').format;
     var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, databaseConnection) {
+        if (error) {
+            console.log("error with connection to db!");
+        }
     	db = databaseConnection.db('musicTasteDB');
         db.listCollections().toArray(function(err, collInfos) {
             for (var i = 0; i < collInfos.length; i++) {
                 if (collInfos[i].name == 'firstUser') {
+                    console.log("inside here: ", collInfos[i].name)
                     const collection = db.collection('firstUser');
                     collection.drop(function(err, delOK) {
+                        console.log("ERROR: ", err);
                         if (err) throw err;
                         if (delOK) console.log("Collection deleted");
+                        databaseConnection.close();
                     });
                 }
             }
@@ -165,7 +173,7 @@ const reqAlbums = async (offset) => {
 }
 
 app.get('/loginFirst', function(req, res) {
-    deleteCollection();
+    // deleteCollection();
 
     var state = generateRandomString(16);
     res.cookie(stateKey, state);
@@ -303,6 +311,7 @@ app.get('/albumsSecond', function(req, res) {
                 var albumsObject2 = loadRelevantDataToObject(allAlbums2);
 
                 var results = getSimilarAlbums(albumsObject1, albumsObject2);
+                deleteCollection();
                 res.render('results', {percentage: results.percentSimilar, similarList: results.similarList});
             });
         }

@@ -14,17 +14,17 @@ top5Second.ejs
     </head>
 
     <body>
-        <div class="thinBar"></div>
-        <div class="bar"></div>
+        <div class="thinBar colorThin"></div>
+        <div class="bar colorThick"></div>
         <div class="container">
             <h1 id="musicTasteSmallTitle">Music Taste</h1>
-            <div class="card">
-                <p class="smallText" id="topArtistsSecond">Your Friend's Top Artists:</p>
-                <ol id="listTop5Second" class="smallerText"><%top5List.forEach(function(artist){%><li><%=artist%></li><%});%></ol>
+            <div class="card colorCard">
+                <p class="smallText colorAltText" id="topArtistsSecond">Your Friend's Top Artists:</p>
+                <ol id="listTop5Second" class="smallerText colorAltText"><%top5List.forEach(function(artist){%><li><%=artist%></li><%});%></ol>
             </div>
             <p class="smallText">Ready to find out your music taste compatibility?</p>
             <div id="second">
-                <a href="/albumsSecond" class="buttonTaste" id="compare">COMPARE SPOTIFY LIBRARIES</a>
+                <a href="/albumsSecond" class="buttonTaste colorAltButton" id="compare">COMPARE SPOTIFY LIBRARIES</a>
             </div>
         </div>
 

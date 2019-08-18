@@ -185,23 +185,48 @@ app.get('/loginSecond', function(req, res) {
     }));
 });
 
+// app.get('/newAllAlbumsFirst', function(req, res) {
+//     (async () => {
+//         try {
+//             allAlbums = await getAlbums();
+//
+//             // For testing purposes
+//             // for (var i = 0; i < allAlbums.length; i++) {
+//             //     console.log("next album set");
+//             //     console.log("myNumAlbums: ", allAlbums[i].items.length);
+//             //     for (var j = 0; j < allAlbums[i].items.length; j++) {
+//             //         console.log(allAlbums[i].items[j].album.name + " by " + allAlbums[i].items[j].album.artists[0].name);
+//             //     }
+//             // }
+//
+//             var albumsObject = loadRelevantDataToObject(allAlbums);
+//
+//             res.render('top5First', {'top5List': top5FirstList, 'albumsFirst': albumsObject});
+//             res.render('top5First', {top5List: top5FirstList, albumsFirst: albumsObject});
+//         }
+//         catch (e) {
+//             console.log("error in albumsFirst ", e);
+//         }
+//     })();
+// });
+
 app.get('/albumsFirst', function(req, res) {
     (async () => {
         try {
             allAlbums = await getAlbums();
 
             // For testing purposes
-            for (var i = 0; i < allAlbums.length; i++) {
-                console.log("next album set");
-                console.log("myNumAlbums: ", allAlbums[i].items.length);
-                for (var j = 0; j < allAlbums[i].items.length; j++) {
-                    console.log(allAlbums[i].items[j].album.name + " by " + allAlbums[i].items[j].album.artists[0].name);
-                }
-            }
+            // for (var i = 0; i < allAlbums.length; i++) {
+            //     console.log("next album set");
+            //     console.log("myNumAlbums: ", allAlbums[i].items.length);
+            //     for (var j = 0; j < allAlbums[i].items.length; j++) {
+            //         console.log(allAlbums[i].items[j].album.name + " by " + allAlbums[i].items[j].album.artists[0].name);
+            //     }
+            // }
 
             var albumsObject = loadRelevantDataToObject(allAlbums);
-            var data = {'firstUser': albumsObject};
-            storeInDb(data);
+            // var data = {'firstUser': albumsObject};
+            // storeInDb(data);
 
             var top5First = await getTopArtists();
             var top5FirstList = []
@@ -209,7 +234,7 @@ app.get('/albumsFirst', function(req, res) {
                 top5FirstList.push(top5First.items[i].name);
             }
 
-            res.render('top5First', {top5List: top5FirstList});
+            res.render('top5First', {top5List: top5FirstList, albumsFirst: JSON.stringify(albumsObject)});
         }
         catch (e) {
             console.log("error in albumsFirst ", e);
@@ -239,9 +264,9 @@ function getSimilarAlbums(firstAlbums, secondAlbums) {
     var percentage = Math.round(simCount / denom * 100 * 100) / 100;
 
     // For testing purposes
-    for (var x = 0; x < similarAlbums.length; x++) {
-        console.log(similarAlbums[x].name + " by " + similarAlbums[x].artist);
-    }
+    // for (var x = 0; x < similarAlbums.length; x++) {
+    //     console.log(similarAlbums[x].name + " by " + similarAlbums[x].artist);
+    // }
 
     return {percentSimilar: percentage, similarList: similarAlbums};
 }

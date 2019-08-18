@@ -29,5 +29,31 @@ top5First.ejs
                 <a href="/loginSecond" class="buttonLogin colorThick" id="friendLogin">FRIEND LOGIN TO SPOTIFY!</a>
             </div>
         </div>
+
+        <script>
+            if (typeof(Storage) !== "undefined") {
+                console.log("YEAHHH support for storage");
+                var data = <%- albumsFirst %>
+                console.log("in here");
+                console.log("albumsFirst: ", data);
+
+                for (var key in data) {
+                    console.log("key: ", key);
+                    // skip loop if the property is from prototype
+                    if (!data.hasOwnProperty(key)) continue;
+
+                    var val = data[key];
+                    console.log("value: ", val);
+                    localStorage.setItem(key, JSON.stringify(val));
+                }
+
+                var getVal = localStorage.getItem("0LncwHODjl9isM9pzVmuOS");
+                console.log("getVal: ", getVal);
+            } else {
+                throw console.error("Error, this browser doesn't support localStorage");
+            }
+
+        </script>
+
     </body>
 </html>

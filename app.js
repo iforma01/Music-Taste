@@ -48,24 +48,6 @@ app.use(express.static(__dirname + '/public'))
     .use(cors())
     .use(cookieParser());
 
-// Database IRF
-
-// TODO
-// var mongoUri = process.env.MONGODB_URI;
-// var MongoClient = require('mongodb').MongoClient, format = require('util').format;
-// var db = MongoClient.connect(mongoUri, {useNewUrlParser: true}, function(error, databaseConnection) {
-//     console.log("in monogodb connection!!!");
-// 	db = databaseConnection.db('musicTasteDB');
-//     const collection = db.collection('firstUser');
-//     collection.insertOne({name: 'Roger'}, (err, result) => {
-//         console.log("we in here");
-//     })
-//
-//     collection.findOne({name: 'Roger'}, (err, item) => {
-//         //console.log(item)
-//     })
-// });
-
 const getTopArtists = async () => {
     const topRequest = {
         url: `https://api.spotify.com/v1/me/top/artists?limit=5`,
@@ -119,22 +101,19 @@ function deleteCollection() {
         db.listCollections().toArray(function(err, collInfos) {
             for (var i = 0; i < collInfos.length; i++) {
                 if (collInfos[i].name == 'firstUser') {
-                    console.log("inside here: ", collInfos[i].name)
                     const collection = db.collection('firstUser');
                     collection.drop(function(err, delOK) {
-                        console.log("ERROR: ", err);
-                        if (err) throw err;
+
+                        if (err) {
+                            console.log("ERROR: ", err);
+                            throw err;
+                        }
                         if (delOK) console.log("Collection deleted");
                         databaseConnection.close();
                     });
                 }
             }
         });
-        // const collection = db.collection('SpotifyUser');
-        // collection.drop(function(err, delOK) {
-        //     if (err) throw err;
-        //     if (delOK) console.log("Collection deleted");
-        // });
     });
 }
 
@@ -173,8 +152,6 @@ const reqAlbums = async (offset) => {
 }
 
 app.get('/loginFirst', function(req, res) {
-    // deleteCollection();
-
     var state = generateRandomString(16);
     res.cookie(stateKey, state);
 
@@ -192,7 +169,6 @@ app.get('/loginFirst', function(req, res) {
 });
 
 app.get('/loginSecond', function(req, res) {
-
     var state = generateRandomString(16);
     res.cookie(stateKey, state);
 
@@ -372,10 +348,8 @@ app.get('/secondMusic', function(req, res) {
 
 
 app.get('/callback', function(req, res) {
-
     // your application requests refresh and access tokens
     // after checking the state parameter
-
     var code = req.query.code || null;
     var state = req.query.state || null;
     var storedState = req.cookies ? req.cookies[stateKey] : null;

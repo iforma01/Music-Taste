@@ -5,18 +5,6 @@
  */
 
 /*
-Color palette:
-#adc7a9 - green
-#628C5C - dark green
-#214a1b - very dark green
-#661e2b - prune
-#FFE2E2 - misty rose
-#ffa6ac - coral
-
-
-#e4e63 - off white pearl
-
-
 colors:
 1. music taste title and some text - black
 2. thick underline bar and some buttons
@@ -25,65 +13,42 @@ colors:
 5. card background color
 6. background color
 7. percentage similar
-
 */
 
 
 body {
-    /* background-color: #adc7a9; */
-    /* background-color: #c5f2b6; */
-    /* background-color: #a2c797; */
-    /* background-color: #acc797; */
-    /* background-color: #f2e6f0; */
-    /* background-color: #E8E6F2; */
     background-color: #E6F0F2;
-    /* background-color: #E6F2ED; */
-    /* background-color: #EAF2E6; */
-
-    /* background-color: white; */
 }
 
 
-/* Colors */
+/************************ COLORS ***********************/
 .colorThick {
-    /* background-color: #cc821b; */
-    /* background-color: #E28B12; */
-    /* background-color: #E27E12; */
     background-color: #EF8F09;
 }
 .colorThin {
-    /* background-color: #913d55; */
     background-color: #AF496F;
 }
 .colorAltButton {
-    /* background-color: #851126; */
     background-color: #93051F;
 }
 .colorAltText {
-    /* color: #851126; */
     color: #93051F;
 }
 .colorCard {
-    /* background-color: #f7f5f2; */
     background-color: #FFFCF9;
-    /* background-color: #FEF2FF; */
 }
 
 
 
-/* Buttons */
+/************************ BUTTONS *************************/
 .buttonTaste {
     margin-bottom: 100px;
     border-color: #661e2b;
-    /* background-color: #661e2b; */
-    /* background-color: #851126; */
     border-radius: 25px;
     padding: 20px;
     width: 270px;
     height: 70px;
     cursor:pointer;
-
-    /* font-family: 'Roboto Condensed', sans-serif; */
     font-family: 'Roboto Mono', monospace;
     font-size: 17px;
     font-weight: 500;
@@ -93,21 +58,14 @@ body {
 .buttonLogin {
     margin-bottom: 100px;
     border-color: #FFE2E2;
-    /* background-color: #FFE2E2; */
-    /* background-color: #A4243B; */
-    /* background-color: #cc821b; */
-    /* background-color: #bf700f; */
     border-radius: 25px;
     padding: 20px;
     width: 270px;
     height: 70px;
     cursor:pointer;
-
-    /* font-family: 'Roboto Condensed', sans-serif; */
     font-family: 'Roboto Mono', monospace;
     font-size: 17px;
     font-weight: 600;
-    /* color: #D8C99B; */
     color: black;
 }
 #yourLogin, #myTaste, #yourTaste {
@@ -121,28 +79,17 @@ body {
 
 
 
-
-/* Text */
+/*********************** TEXT **********************/
 .largeText {
-    /* font-family: 'Poppins', sans-serif; */
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: 800;
     font-size: 55px;
-    /* color: #214a1b; */
-    /* color: #941e33; */
-    /* color: #253766; */
-    /* color: #851126; */
     padding-top: 10px;
     padding-bottom: 10px;
 }
 .medText {
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 40px;
-    /* color: #214a1b; */
-    /* color: #53131E; */
-    /* color: #941e33; */
-    /* color: #253766; */
-    /* color: #851126; */
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -177,7 +124,6 @@ body {
     text-align: center;
 }
 #listTop5First, #listTop5Second {
-    /* list-style-type: none; */
     text-align: center;
 }
 ol {
@@ -190,9 +136,6 @@ ol {
     margin-inline-end: 0px;
     padding-left: 0px;
     line-height: normal;
-    /* color: white; */
-    /* color: #913d55; */
-    /* color: #851126; */
     padding-bottom: 50px;
 }
 ul {
@@ -204,10 +147,8 @@ ul {
     margin-inline-end: 0px;
     padding-left: 0px;
     line-height: normal;
-    /* color: #851126; */
 }
 li {
-    /* font-family: 'Roboto Mono', monospace; */
     font-family: 'Raleway', sans-serif;
     font-weight: 100;
     font-size: 24px;
@@ -238,43 +179,30 @@ a {
     padding-top: 100px;
     overflow-wrap: normal;
     line-height: normal;
-    /* height: 100px; */
-    /* width: 600px; */
-    /* margin-left: 350px; */
 }
 #topArtistsFirst, #topArtistsSecond, #commonAlbums {
-    /* font-family: 'Roboto Mono', monospace; */
-    /* font-family: 'Roboto Condensed', sans-serif; */
     font-family: 'Raleway', sans-serif;
     font-weight: 400;
     font-size: 30px;
     padding-top: 10px;
-    /* color: white; */
-    /* color: #913d55; */
-    /* color: #851126; */
 }
 #topArtistsFirst {
-    /* color: #7A69AD; */
     color: #588B8B;
 }
 #topArtistsSecond {
     color: #F15025;
-    /* color: #24722C; */
 }
 #commonAlbums {
     font-size: 40px;
     color: #00A676;
 }
 #spotifyLibrariesAre {
-    /* font-family: 'Roboto Mono', monospace; */
     margin-top: 100px;
 }
 
 
 
-
-
-/* Containers */
+/******************CONTAINERS ***********************/
 .containerStart {
     text-align: center;
     font-size: 1px;
@@ -296,11 +224,6 @@ a {
 .card {
     width: 500px;
     margin-top: 30px;
-    /* background-color: #214a1b; */
-    /* background-color: #851126; */
-    /* background-color: #913d55; */
-    /* background-color: #f7f5f2; */
-
     border-radius: 10px;
     text-align: center;
     display: inline-block;
@@ -311,8 +234,6 @@ a {
 }
 #cardResults {
     width: 630px;
-    /* background-color: #fff8ed; */
-    /* background-color: #f7f5f2; */
     border-radius: 10px;
     text-align: center;
     display: inline-block;
@@ -324,35 +245,25 @@ a {
 .thinBarStart {
     width: auto;
     height: 8px;
-    /* background-color: #8e5572; */
-    /* background-color: #913d55; */
     margin-top: 120px;
 }
 .barStart {
     width: auto;
     height: 30px;
-    /* background-color: #cc821b; */
-    /* background-color: #c9670c; */
-    /* background-color: #bf700f; */
 }
 .thinBar {
     width: auto;
     height: 5px;
-    /* background-color: #8e5572; */
-    /* background-color: #913d55; */
     margin-top: 80px;
 }
 .bar {
     width: auto;
     height: 20px;
-    /* background-color: #cc821b; */
-    /* margin-top: 120px; */
 }
 
 
 
-
-/* Pages */
+/***************** DIV TO CONTROL DISPLAY **************/
 #login, #loggedin {
     display: none;
 }

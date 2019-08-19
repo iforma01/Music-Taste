@@ -16,8 +16,10 @@ require('dotenv').config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const PORT = process.env.PORT || 8888;
-const REDIRECT_URI_FIRST = 'http://localhost:8888/callback';
-const REDIRECT_URI_SECOND = 'http://localhost:8888/secondMusic';
+// const REDIRECT_URI_FIRST = 'http://localhost:8888/callback';
+// const REDIRECT_URI_SECOND = 'http://localhost:8888/secondMusic';
+const REDIRECT_URI_FIRST = 'https://music-taste-compare.herokuapp.com/callback';
+const REDIRECT_URI_SECOND = 'https://music-taste-compare.herokuapp.com/secondMusic';
 const API_ENDPOINT = `https://api.spotify.com`;
 const PAGE_SIZE = 50; // How many records the API returns in a page.
 
@@ -293,6 +295,8 @@ app.get('/callback', function(req, res) {
     var code = req.query.code || null;
     var state = req.query.state || null;
     var storedState = req.cookies ? req.cookies[stateKey] : null;
+    console.log("state: ", state);
+    console.log("storedState: ", storedState);
 
     if (state === null || state !== storedState) {
         res.redirect('/#' + querystring.stringify({

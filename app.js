@@ -40,8 +40,9 @@ var generateRandomString = function(length) {
 
 var stateKey = 'spotify_auth_state';
 
+const bodyParser = require('body-parser');
 var app = express();
-
+app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 
 app.use(express.static(__dirname + '/public'))
@@ -185,31 +186,6 @@ app.get('/loginSecond', function(req, res) {
     }));
 });
 
-// app.get('/newAllAlbumsFirst', function(req, res) {
-//     (async () => {
-//         try {
-//             allAlbums = await getAlbums();
-//
-//             // For testing purposes
-//             // for (var i = 0; i < allAlbums.length; i++) {
-//             //     console.log("next album set");
-//             //     console.log("myNumAlbums: ", allAlbums[i].items.length);
-//             //     for (var j = 0; j < allAlbums[i].items.length; j++) {
-//             //         console.log(allAlbums[i].items[j].album.name + " by " + allAlbums[i].items[j].album.artists[0].name);
-//             //     }
-//             // }
-//
-//             var albumsObject = loadRelevantDataToObject(allAlbums);
-//
-//             res.render('top5First', {'top5List': top5FirstList, 'albumsFirst': albumsObject});
-//             res.render('top5First', {top5List: top5FirstList, albumsFirst: albumsObject});
-//         }
-//         catch (e) {
-//             console.log("error in albumsFirst ", e);
-//         }
-//     })();
-// });
-
 app.get('/albumsFirst', function(req, res) {
     (async () => {
         try {
@@ -225,9 +201,6 @@ app.get('/albumsFirst', function(req, res) {
             // }
 
             var albumsObject = loadRelevantDataToObject(allAlbums);
-            // var data = {'firstUser': albumsObject};
-            // storeInDb(data);
-
             var top5First = await getTopArtists();
             var top5FirstList = []
             for (var i = 0; i < top5First.items.length; i++) {
@@ -303,24 +276,40 @@ app.get('/top5Second', function(req, res) {
     })();
 });
 
-app.get('/albumsSecond', function(req, res) {
+app.post('/albumsSecond', function(req, res) {
+    console.log("REQUEST: ", req.body);
+    var albumsObject1 = req.body;
     (async () => {
         try {
-            getFromDb(async function(allAlbums1) {
-                var albumsObject1 = allAlbums1[0].firstUser;
-                allAlbums2 = await getAlbums();
-                var albumsObject2 = loadRelevantDataToObject(allAlbums2);
-
-                var results = getSimilarAlbums(albumsObject1, albumsObject2);
-                deleteCollection();
-                res.render('results', {percentage: results.percentSimilar, similarList: results.similarList});
-            });
+            allAlbums2 = await getAlbums();
+            var albumsObject2 = loadRelevantDataToObject(allAlbums2);
+            var results = getSimilarAlbums(albumsObject1, albumsObject2);
+            res.json({percentage: results.percentSimilar, similarList: results.similarList});
         }
         catch (e) {
             console.log("error in albumsSecond ", e);
         }
     })();
 });
+
+// app.get('/albumsSecond', function(req, res) {
+//     (async () => {
+//         try {
+//             getFromDb(async function(allAlbums1) {
+//                 var albumsObject1 = allAlbums1[0].firstUser;
+//                 allAlbums2 = await getAlbums();
+//                 var albumsObject2 = loadRelevantDataToObject(allAlbums2);
+//
+//                 var results = getSimilarAlbums(albumsObject1, albumsObject2);
+//                 deleteCollection();
+//                 res.render('results', {percentage: results.percentSimilar, similarList: results.similarList});
+//             });
+//         }
+//         catch (e) {
+//             console.log("error in albumsSecond ", e);
+//         }
+//     })();
+// });
 
 app.get('/secondMusic', function(req, res) {
     var code = req.query.code || null;

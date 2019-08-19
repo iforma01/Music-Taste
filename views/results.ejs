@@ -24,5 +24,9 @@ results.ejs
                 <ul id="list" class="smallerText colorAltText"><%similarList.forEach(function(album){%><li><%=album.name %> - <%= album.artist%></li><%});%></ul>
             </div>
         </div>
+
+        <script>
+            localStorage.clear();
+        </script>
     </body>
 </html>

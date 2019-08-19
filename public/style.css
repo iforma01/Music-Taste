@@ -76,6 +76,9 @@ body {
     position: relative;
     top: 20px;
 }
+#compare {
+    display: inline;
+}
 
 
 
@@ -264,6 +267,6 @@ a {
 
 
 /***************** DIV TO CONTROL DISPLAY **************/
-#login, #loggedin {
+#login, #loggedin, #resultsSection {
     display: none;
 }
